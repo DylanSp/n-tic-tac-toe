@@ -82,6 +82,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Data\Data.csproj">
+      <Project>{85efeb31-7873-4131-8ed6-e0050bdd9b57}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Managers\Managers.csproj">
+      <Project>{d4786267-5e5d-414c-b781-92cba3b3b7ca}</Project>
+      <Name>Managers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NTicTacToe\NTicTacToe.csproj">
       <Project>{5F8B777E-FF87-437C-85B5-E3650DF9C21E}</Project>
       <Name>NTicTacToe</Name>
