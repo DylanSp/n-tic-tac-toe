@@ -15,7 +15,7 @@ namespace Managers
             {
                 CurrentPlayer = Player.X,
                 Result = GameResult.Unfinished,
-                Board = Enumerable.Repeat(CellState.Empty, 9).ToArray()
+                Board = Enumerable.Repeat(CellState.Empty, 9).ToList()
             };
         }
 
