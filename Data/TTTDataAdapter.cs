@@ -12,7 +12,19 @@ namespace Data
 
         public int Create()
         {
-            throw new System.NotImplementedException();
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                var queryString = "INSERT GameData (GameState) OUTPUT inserted.Id VALUES @state";
+                var command = new SqlCommand(queryString, connection);
+
+                var stateParam = new SqlParameter("@state", SqlDbType.NVarChar);
+                stateParam.Value = SerializeGameData(new TicTacToeData());
+                command.Parameters.Add(stateParam);
+
+                connection.Open();
+                var id = (int)command.ExecuteScalar();
+                return id;
+            }
         }
 
         public void Delete(int id)
@@ -24,7 +36,7 @@ namespace Data
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
-                var queryString = "SELECT gameState FROM GameData WHERE id = @id";
+                var queryString = "SELECT GameState FROM GameData WHERE Id = @id";
                 var command = new SqlCommand(queryString, connection);
 
                 var idParam = new SqlParameter("@id", SqlDbType.Int);
