@@ -52,53 +52,45 @@ namespace NTicTacToe.Models
             Board = Enumerable.Repeat(CellState.Empty, 9).ToArray();
         }
 
-        public (MoveResult result, TicTacToeGame updatedGame) MakeMove(int cellNum)
+        public MoveResult MakeMove(int cellNum)
         {
             if (cellNum < 0 || cellNum > 8)
             {
                 throw new Exception("Cell number is outside of the 0-8 range!");
             }
 
-            // TODO - should this be here, or below? should illegal moves just return current game?
-
-            var updatedGame = new TicTacToeGame(); // TODO - use property copying constructor? is there a way to disable that? 
-
-            updatedGame.CurrentPlayer = CurrentPlayer;
-            updatedGame.Result = Result;
-            Array.Copy(Board, updatedGame.Board, Board.Length);
-
             // check if cell is already filled
-            if (updatedGame.Board[cellNum] != CellState.Empty)
+            if (Board[cellNum] != CellState.Empty)
             {
-                return (MoveResult.CellFilled, updatedGame);
+                return MoveResult.CellFilled;
             }
 
             // check if game is already over
-            if (updatedGame.Result != GameResult.Unfinished)
+            if (Result != GameResult.Unfinished)
             {
-                return (MoveResult.GameAlreadyOver, updatedGame);
+                return MoveResult.GameAlreadyOver;
             }
 
             // move is legal => update the board and current player
-            if (updatedGame.CurrentPlayer == Player.X)
+            if (CurrentPlayer == Player.X)
             {
-                updatedGame.Board[cellNum] = CellState.X;
-                updatedGame.CurrentPlayer = Player.O;
+                Board[cellNum] = CellState.X;
+                CurrentPlayer = Player.O;
             }
             else
             {
-                updatedGame.Board[cellNum] = CellState.O;
-                updatedGame.CurrentPlayer = Player.X;
+                Board[cellNum] = CellState.O;
+                CurrentPlayer = Player.X;
             }
 
             // check for victory
-            updatedGame.UpdateGameResult();
-            if (updatedGame.Result != GameResult.Unfinished)
+            UpdateGameResult();
+            if (Result != GameResult.Unfinished)
             {
-                return (MoveResult.GameFinished, updatedGame);
+                return MoveResult.GameFinished;
             }
             
-            return (MoveResult.WaitingForMove, updatedGame);
+            return MoveResult.WaitingForMove;
         }
 
         private void UpdateGameResult()
