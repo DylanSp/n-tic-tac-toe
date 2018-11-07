@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NTicTacToe.Models;
@@ -75,6 +76,80 @@ namespace NTicTacToe.Tests
             var (_, game1) = game0.MakeMove(0);
             var (_, game2) = game1.MakeMove(1);
             Assert.AreEqual(Player.X, game2.CurrentPlayer);
+        }
+
+        [TestMethod]
+        public void XWinningSequence_ShouldShowXAsWinningPlayer()
+        {
+            var games = new List<TicTacToeGame>
+            {
+                new TicTacToeGame()
+            };
+            var results = new List<MoveResult>();
+            var moveSequence = new int[] {0, 3, 1, 4, 2};
+            foreach (var move in moveSequence)
+            {
+                var (result, game) = games.Last().MakeMove(move);
+                results.Add(result);
+                games.Add(game);
+            }
+            Assert.AreEqual(MoveResult.GameFinished, results.Last());
+            Assert.AreEqual(GameResult.XWon, games.Last().Result);
+        }
+
+        [TestMethod]
+        public void OWinningSequence_ShouldShowOAsWinningPlayer()
+        {
+            var games = new List<TicTacToeGame>
+            {
+                new TicTacToeGame()
+            };
+            var results = new List<MoveResult>();
+            var moveSequence = new int[] { 0, 3, 1, 4, 7, 5 };
+            foreach (var move in moveSequence)
+            {
+                var (result, game) = games.Last().MakeMove(move);
+                results.Add(result);
+                games.Add(game);
+            }
+            Assert.AreEqual(MoveResult.GameFinished, results.Last());
+            Assert.AreEqual(GameResult.OWon, games.Last().Result);
+        }
+
+        [TestMethod]
+        public void MoveInCompletedGame_ShouldReturnError()
+        {
+            var games = new List<TicTacToeGame>
+            {
+                new TicTacToeGame()
+            };
+            var results = new List<MoveResult>();
+            var moveSequence = new int[] { 0, 3, 1, 4, 2, 8};
+            foreach (var move in moveSequence)
+            {
+                var (result, game) = games.Last().MakeMove(move);
+                results.Add(result);
+                games.Add(game);
+            }
+            Assert.AreEqual(MoveResult.GameAlreadyOver, results.Last());
+        }
+
+        [TestMethod]
+        public void GameDrawingSequence_ShouldShowDrawnGame()
+        {
+            var games = new List<TicTacToeGame>
+            {
+                new TicTacToeGame()
+            };
+            var results = new List<MoveResult>();
+            var moveSequence = new int[] { 0, 3, 1, 4, 5, 2, 6, 7, 8 };
+            foreach (var move in moveSequence)
+            {
+                var (result, game) = games.Last().MakeMove(move);
+                results.Add(result);
+                games.Add(game);
+            }
+            Assert.AreEqual(GameResult.Drawn, games.Last().Result);
         }
     }
 }
