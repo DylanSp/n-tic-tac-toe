@@ -13,30 +13,7 @@ namespace Data
         // private const string ConnectionString = "Data Source=localhost;Initial Catalog=TicTacToe;Persist Security Info=True;User ID=sa;Password=D0cupPhase1!";
         private const string ConnectionString = "Data Source=localhost;Initial Catalog=TicTacToe;Persist Security Info=True;User ID=sa;Password=adminpass";
 
-        // can throw exceptions from opening connection, running query, serialization
-        public TicTacToeData Create()
-        {
-            using (var connection = new SqlConnection(ConnectionString))
-            {
-                var queryString = "INSERT GameData (Id, GameState) VALUES (@id, @state)";
-                var command = new SqlCommand(queryString, connection);
-
-                var gameData = new TicTacToeData();
-
-                var idParam = new SqlParameter("@id", SqlDbType.UniqueIdentifier);
-                idParam.Value = gameData.Id;
-                command.Parameters.Add(idParam);
-
-                var stateParam = new SqlParameter("@state", SqlDbType.NVarChar);
-                stateParam.Value = SerializeGameData(gameData);
-                command.Parameters.Add(stateParam);
-
-                connection.Open();
-                command.ExecuteNonQuery();
-                return gameData;
-            }
-        }
-
+        // can throw exceptions from opening connection, running query, deserialization
         public void Delete(Guid id)
         {
             using (var connection = new SqlConnection(ConnectionString))
@@ -71,11 +48,15 @@ namespace Data
             }
         }
 
-        public void Update(TicTacToeData newData)
+        // can throw exceptions from opening connection, running query, deserialization
+        public void CreateOrUpdate(TicTacToeData newData)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
-                var queryString = "UPDATE GameData SET GameState = @state WHERE Id = @id";
+                var queryString = @"IF EXISTS ( SELECT * FROM GameData WHERE Id = @id)
+    UPDATE GameData SET GameState = @state WHERE Id = @id
+ELSE
+    INSERT GameData (Id, GameState) VALUES (@id, @state)";
                 var command = new SqlCommand(queryString, connection);
 
                 var stateParam = new SqlParameter("@state", SqlDbType.NVarChar);

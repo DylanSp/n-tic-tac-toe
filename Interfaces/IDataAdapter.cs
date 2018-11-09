@@ -10,8 +10,7 @@ namespace Interfaces
     public interface IDataAdapter<T> where T : IEntity
     {
         T Read(Guid id);
-        T Create();
-        void Update(T newData);
+        void CreateOrUpdate(T newData);
         void Delete(Guid id);
     }
 }

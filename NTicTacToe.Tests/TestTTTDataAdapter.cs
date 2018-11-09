@@ -20,11 +20,16 @@ namespace NTicTacToe.Tests
         public void TempTests()
         {
             var adapter = new TTTDataAdapter();
-            var gameData0 = adapter.Create();
-            var gameData1 = adapter.Create();
+            var gameData0 = new TicTacToeData();
+            adapter.CreateOrUpdate(gameData0);
             var gameDataShouldEqual0 = adapter.Read(gameData0.Id);
+            Assert.AreEqual(gameData0, gameDataShouldEqual0);
+
             gameData0.CurrentPlayer = Player.O;
-            adapter.Update(gameData0);
+            adapter.CreateOrUpdate(gameData0);
+
+            var gameData1 = new TicTacToeData();
+            adapter.CreateOrUpdate(gameData1);
             adapter.Delete(gameData1.Id);
         }
     }
