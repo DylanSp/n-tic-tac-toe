@@ -8,7 +8,7 @@
     public interface IDataAdapter<T> where T : IEntity
     {
         T Read(int id);
-        int Create();
+        T Create();
         void Update(T newData);
         void Delete(int id);
     }

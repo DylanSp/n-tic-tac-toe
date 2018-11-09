@@ -12,21 +12,20 @@ namespace NTicTacToe.Tests
         {
             var data = new TicTacToeData();
             var roundTripped = TTTDataAdapter.DeserializeGameData(TTTDataAdapter.SerializeGameData(data));
-            // Assert.AreEqual(data, roundTripped);
-            Assert.IsTrue(data.Equals(roundTripped));
+            Assert.AreEqual(data, roundTripped);
         }
 
         // note - requires database connection!
-        [TestMethod]
+        [TestMethod, TestCategory("IntegrationTest")]
         public void TempTests()
         {
             var adapter = new TTTDataAdapter();
-            int createdId0 = adapter.Create();
-            int createdId1 = adapter.Create();
-            var gameData0 = adapter.Read(createdId0);
+            var gameData0 = adapter.Create();
+            var gameData1 = adapter.Create();
+            var gameDataShouldEqual0 = adapter.Read(gameData0.Id);
             gameData0.CurrentPlayer = Player.O;
             adapter.Update(gameData0);
-            adapter.Delete(createdId1);
+            adapter.Delete(gameData1.Id);
         }
     }
 }

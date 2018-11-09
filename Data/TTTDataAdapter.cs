@@ -13,20 +13,23 @@ namespace Data
         private const string ConnectionString = "Data Source=localhost;Initial Catalog=TicTacToe;Persist Security Info=True;User ID=sa;Password=adminpass";
 
         // can throw exceptions from opening connection, running query, serialization
-        public int Create()
+        public TicTacToeData Create()
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 var queryString = "INSERT GameData (GameState) OUTPUT inserted.Id VALUES (@state)";
                 var command = new SqlCommand(queryString, connection);
 
+                var gameData = new TicTacToeData();
+
                 var stateParam = new SqlParameter("@state", SqlDbType.NVarChar);
-                stateParam.Value = SerializeGameData(new TicTacToeData());
+                stateParam.Value = SerializeGameData(gameData);
                 command.Parameters.Add(stateParam);
 
                 connection.Open();
                 var id = (int)command.ExecuteScalar();
-                return id;
+                gameData.Id = id;
+                return gameData;
             }
         }
 
