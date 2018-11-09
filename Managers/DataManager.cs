@@ -15,10 +15,9 @@ namespace Managers
         public IGameManager GameManager { get; private set; }
         private IGenericDataAdapter<ITicTacToeData> Adapter { get; set; }
 
-        // don't want to do this in constructor, because CreateOrUpdate() can throw
         public void CreateAndSaveGame()
         {
-            GameManager = new GameManager();
+            GameManager.ResetGame();
             Adapter.Save(GameManager.GameData);
         }
 

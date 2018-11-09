@@ -11,14 +11,17 @@ namespace Managers
     {
         public ITicTacToeData GameData { get; private set; }
 
-        public GameManager()
+        public GameManager(ITicTacToeData data)
         {
-            GameData = new TicTacToeData
-            {
-                CurrentPlayer = Player.X,
-                Result = GameResult.Unfinished,
-                Board = Enumerable.Repeat(CellState.Empty, 9).ToList()
-            };
+            GameData = data;
+            ResetGame();
+        }
+
+        public void ResetGame()
+        {
+            GameData.CurrentPlayer = Player.X;
+            GameData.Result = GameResult.Unfinished;
+            GameData.Board = Enumerable.Repeat(CellState.Empty, 9).ToList();
         }
 
         public MoveResult MakeMove(int cellNum)
