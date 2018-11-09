@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace Managers
 {
-    public class TicTacToeManager
+    public class GameManager
     {
         public TicTacToeData GameData { get; private set; }
 
-        public TicTacToeManager()
+        public GameManager()
         {
             GameData = new TicTacToeData
             {
