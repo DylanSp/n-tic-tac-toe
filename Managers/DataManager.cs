@@ -21,6 +21,11 @@ namespace Managers
             Adapter.Save(GameManager.GameData);
         }
 
+        public ITicTacToeData GetGameData ()
+        {
+            return Adapter.Read(GameManager.GameData.Id);
+        }
+
         public MoveResult AttemptAndSaveMove(int cellNum)
         {
             var result = GameManager.MakeMove(cellNum);
