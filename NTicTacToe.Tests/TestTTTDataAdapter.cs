@@ -1,6 +1,6 @@
-﻿using System;
-using Data;
+﻿using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Types;
 
 namespace NTicTacToe.Tests
 {

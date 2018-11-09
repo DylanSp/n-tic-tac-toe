@@ -1,13 +1,15 @@
 ﻿using Data;
+using Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Types;
 
 namespace Managers
 {
-    public class GameManager
+    public class GameManager : IGameManager
     {
-        public TicTacToeData GameData { get; private set; }
+        public ITicTacToeData GameData { get; private set; }
 
         public GameManager()
         {

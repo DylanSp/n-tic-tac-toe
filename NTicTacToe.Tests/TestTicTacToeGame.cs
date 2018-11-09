@@ -3,6 +3,7 @@ using System.Linq;
 using Data;
 using Managers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Types;
 
 namespace NTicTacToe.Tests
 {

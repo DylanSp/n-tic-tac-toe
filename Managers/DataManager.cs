@@ -1,12 +1,19 @@
 ﻿using Data;
 using Interfaces;
+using Types;
 
 namespace Managers
 {
-    class DataManager
+    public class DataManager
     {
-        public GameManager GameManager { get; private set; }
-        private IGenericDataAdapter<TicTacToeData> Adapter { get; set; }
+        public DataManager(IGameManager gameManager, IGenericDataAdapter<ITicTacToeData> adapter)
+        {
+            GameManager = gameManager;
+            Adapter = adapter;
+        }
+
+        public IGameManager GameManager { get; private set; }
+        private IGenericDataAdapter<ITicTacToeData> Adapter { get; set; }
 
         // don't want to do this in constructor, because CreateOrUpdate() can throw
         public void CreateAndSaveGame()

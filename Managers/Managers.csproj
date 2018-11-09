@@ -54,6 +54,10 @@
       <Project>{76e52909-08dc-4b62-801a-2addddad60c3}</Project>
       <Name>Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Types\Types.csproj">
+      <Project>{65FD0663-EB53-452B-93E7-6B8230F82D38}</Project>
+      <Name>Types</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

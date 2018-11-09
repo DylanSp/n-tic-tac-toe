@@ -75,6 +75,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestDataManager.cs" />
     <Compile Include="TestTicTacToeGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTTTDataAdapter.cs" />
@@ -83,9 +84,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Adapters\Adapters.csproj">
+      <Project>{0040a489-bdb8-4cd6-96e3-3c45c9a6a288}</Project>
+      <Name>Adapters</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Data\Data.csproj">
       <Project>{85efeb31-7873-4131-8ed6-e0050bdd9b57}</Project>
       <Name>Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Interfaces\Interfaces.csproj">
+      <Project>{76e52909-08dc-4b62-801a-2addddad60c3}</Project>
+      <Name>Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\Managers\Managers.csproj">
       <Project>{d4786267-5e5d-414c-b781-92cba3b3b7ca}</Project>
@@ -94,6 +103,10 @@
     <ProjectReference Include="..\NTicTacToe\NTicTacToe.csproj">
       <Project>{5F8B777E-FF87-437C-85B5-E3650DF9C21E}</Project>
       <Name>NTicTacToe</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Types\Types.csproj">
+      <Project>{65fd0663-eb53-452b-93e7-6b8230f82d38}</Project>
+      <Name>Types</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
