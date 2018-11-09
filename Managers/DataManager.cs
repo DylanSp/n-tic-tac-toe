@@ -4,16 +4,16 @@ using Types;
 
 namespace Managers
 {
-    public class DataManager
+    public class DataManager : IDataManager
     {
+        private IGameManager GameManager { get; set; }
+        private IGenericDataAdapter<ITicTacToeData> Adapter { get; set; }
+
         public DataManager(IGameManager gameManager, IGenericDataAdapter<ITicTacToeData> adapter)
         {
             GameManager = gameManager;
             Adapter = adapter;
         }
-
-        public IGameManager GameManager { get; private set; }
-        private IGenericDataAdapter<ITicTacToeData> Adapter { get; set; }
 
         public void CreateAndSaveGame()
         {

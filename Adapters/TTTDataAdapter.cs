@@ -8,13 +8,13 @@ using System.Xml.Serialization;
 
 namespace Data
 {
-    public class TTTDataAdapter : IGenericDataAdapter<TicTacToeData>
+    public class TTTDataAdapter : IGenericDataAdapter<ITicTacToeData>
     {
         // private const string ConnectionString = "Data Source=localhost;Initial Catalog=TicTacToe;Persist Security Info=True;User ID=sa;Password=D0cupPhase1!";
         private const string ConnectionString = "Data Source=localhost;Initial Catalog=TicTacToe;Persist Security Info=True;User ID=sa;Password=adminpass";
 
         // can throw exceptions from opening connection, running query, deserialization
-        public void Save(TicTacToeData newData)
+        public void Save(ITicTacToeData newData)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
@@ -38,7 +38,7 @@ ELSE
         }
 
         // can throw exceptions from opening connection, running query, deserialization
-        public TicTacToeData Read(Guid id)
+        public ITicTacToeData Read(Guid id)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
@@ -72,7 +72,7 @@ ELSE
             }
         }
 
-        public static string SerializeGameData(TicTacToeData data)
+        public static string SerializeGameData(ITicTacToeData data)
         {
             var serializer = new XmlSerializer(typeof(TicTacToeData));
             using (var stringWriter = new StringWriter())
@@ -82,7 +82,7 @@ ELSE
             }
         }
 
-        public static TicTacToeData DeserializeGameData(string data)
+        public static ITicTacToeData DeserializeGameData(string data)
         {
             var deserializer = new XmlSerializer(typeof(TicTacToeData));
             using (var reader = new StringReader(data))
