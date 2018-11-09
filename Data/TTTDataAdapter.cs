@@ -14,15 +14,22 @@ namespace Data
         private const string ConnectionString = "Data Source=localhost;Initial Catalog=TicTacToe;Persist Security Info=True;User ID=sa;Password=adminpass";
 
         // can throw exceptions from opening connection, running query, deserialization
-        public void Delete(Guid id)
+        public void Save(TicTacToeData newData)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
-                var queryString = "DELETE FROM GameData WHERE Id = @id";
+                var queryString = @"IF EXISTS ( SELECT * FROM GameData WHERE Id = @id)
+    UPDATE GameData SET GameState = @state WHERE Id = @id
+ELSE
+    INSERT GameData (Id, GameState) VALUES (@id, @state)";
                 var command = new SqlCommand(queryString, connection);
 
+                var stateParam = new SqlParameter("@state", SqlDbType.NVarChar);
+                stateParam.Value = SerializeGameData(newData);
+                command.Parameters.Add(stateParam);
+
                 var idParam = new SqlParameter("@id", SqlDbType.UniqueIdentifier);
-                idParam.Value = id;
+                idParam.Value = newData.Id;
                 command.Parameters.Add(idParam);
 
                 connection.Open();
@@ -41,7 +48,7 @@ namespace Data
                 var idParam = new SqlParameter("@id", SqlDbType.UniqueIdentifier);
                 idParam.Value = id;
                 command.Parameters.Add(idParam);
-                
+
                 connection.Open();
                 var returnData = (string)command.ExecuteScalar();
                 return DeserializeGameData(returnData);
@@ -49,22 +56,15 @@ namespace Data
         }
 
         // can throw exceptions from opening connection, running query, deserialization
-        public void CreateOrUpdate(TicTacToeData newData)
+        public void Delete(Guid id)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
-                var queryString = @"IF EXISTS ( SELECT * FROM GameData WHERE Id = @id)
-    UPDATE GameData SET GameState = @state WHERE Id = @id
-ELSE
-    INSERT GameData (Id, GameState) VALUES (@id, @state)";
+                var queryString = "DELETE FROM GameData WHERE Id = @id";
                 var command = new SqlCommand(queryString, connection);
 
-                var stateParam = new SqlParameter("@state", SqlDbType.NVarChar);
-                stateParam.Value = SerializeGameData(newData);
-                command.Parameters.Add(stateParam);
-
                 var idParam = new SqlParameter("@id", SqlDbType.UniqueIdentifier);
-                idParam.Value = newData.Id; 
+                idParam.Value = id;
                 command.Parameters.Add(idParam);
 
                 connection.Open();

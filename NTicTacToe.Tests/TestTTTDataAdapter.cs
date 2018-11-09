@@ -21,15 +21,15 @@ namespace NTicTacToe.Tests
         {
             var adapter = new TTTDataAdapter();
             var gameData0 = new TicTacToeData();
-            adapter.CreateOrUpdate(gameData0);
+            adapter.Save(gameData0);
             var gameDataShouldEqual0 = adapter.Read(gameData0.Id);
             Assert.AreEqual(gameData0, gameDataShouldEqual0);
 
             gameData0.CurrentPlayer = Player.O;
-            adapter.CreateOrUpdate(gameData0);
+            adapter.Save(gameData0);
 
             var gameData1 = new TicTacToeData();
-            adapter.CreateOrUpdate(gameData1);
+            adapter.Save(gameData1);
             adapter.Delete(gameData1.Id);
         }
     }

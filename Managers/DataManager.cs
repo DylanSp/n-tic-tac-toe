@@ -12,7 +12,7 @@ namespace Managers
         public void CreateAndSaveGame()
         {
             GameManager = new GameManager();
-            Adapter.CreateOrUpdate(GameManager.GameData);
+            Adapter.Save(GameManager.GameData);
         }
 
         public MoveResult AttemptAndSaveMove(int cellNum)
@@ -22,7 +22,7 @@ namespace Managers
             // if move was successful, game state is changed, save it via adapter
             if (result == MoveResult.WaitingForMove || result == MoveResult.GameFinished)
             {
-                Adapter.CreateOrUpdate(GameManager.GameData);
+                Adapter.Save(GameManager.GameData);
             }
 
             return result;

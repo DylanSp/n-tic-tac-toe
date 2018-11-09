@@ -10,8 +10,8 @@ namespace Interfaces
 
     public interface IGenericDataAdapter<T> where T : IEntity
     {
+        void Save(T newData);
         T Read(Guid id);
-        void CreateOrUpdate(T newData);
         void Delete(Guid id);
     }
 }
