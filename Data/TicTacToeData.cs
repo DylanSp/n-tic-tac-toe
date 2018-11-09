@@ -37,7 +37,7 @@ namespace Data
     [Serializable]
     public class TicTacToeData : IEntity
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public Player CurrentPlayer { get; set; }
 
@@ -47,6 +47,7 @@ namespace Data
 
         public TicTacToeData ()
         {
+            Id = Guid.NewGuid();
             Board = new List<CellState>();
         }
 

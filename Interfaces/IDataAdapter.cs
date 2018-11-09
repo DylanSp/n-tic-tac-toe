@@ -1,15 +1,17 @@
-﻿namespace Interfaces
+﻿using System;
+
+namespace Interfaces
 {
     public interface IEntity
     {
-        int Id { get; set; }
+        Guid Id { get; set; }
     }
 
     public interface IDataAdapter<T> where T : IEntity
     {
-        T Read(int id);
+        T Read(Guid id);
         T Create();
         void Update(T newData);
-        void Delete(int id);
+        void Delete(Guid id);
     }
 }

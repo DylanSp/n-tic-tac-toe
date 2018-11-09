@@ -1,4 +1,5 @@
-﻿using Interfaces;
+﻿using System;
+using Interfaces;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -17,30 +18,33 @@ namespace Data
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
-                var queryString = "INSERT GameData (GameState) OUTPUT inserted.Id VALUES (@state)";
+                var queryString = "INSERT GameData (Id, GameState) VALUES (@id, @state)";
                 var command = new SqlCommand(queryString, connection);
 
                 var gameData = new TicTacToeData();
+
+                var idParam = new SqlParameter("@id", SqlDbType.UniqueIdentifier);
+                idParam.Value = gameData.Id;
+                command.Parameters.Add(idParam);
 
                 var stateParam = new SqlParameter("@state", SqlDbType.NVarChar);
                 stateParam.Value = SerializeGameData(gameData);
                 command.Parameters.Add(stateParam);
 
                 connection.Open();
-                var id = (int)command.ExecuteScalar();
-                gameData.Id = id;
+                command.ExecuteNonQuery();
                 return gameData;
             }
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 var queryString = "DELETE FROM GameData WHERE Id = @id";
                 var command = new SqlCommand(queryString, connection);
 
-                var idParam = new SqlParameter("@id", SqlDbType.Int);
+                var idParam = new SqlParameter("@id", SqlDbType.UniqueIdentifier);
                 idParam.Value = id;
                 command.Parameters.Add(idParam);
 
@@ -50,24 +54,20 @@ namespace Data
         }
 
         // can throw exceptions from opening connection, running query, deserialization
-        public TicTacToeData Read(int id)
+        public TicTacToeData Read(Guid id)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 var queryString = "SELECT GameState FROM GameData WHERE Id = @id";
                 var command = new SqlCommand(queryString, connection);
 
-                var idParam = new SqlParameter("@id", SqlDbType.Int);
+                var idParam = new SqlParameter("@id", SqlDbType.UniqueIdentifier);
                 idParam.Value = id;
                 command.Parameters.Add(idParam);
                 
                 connection.Open();
                 var returnData = (string)command.ExecuteScalar();
-                var data = DeserializeGameData(returnData);
-
-                // need to update Id on C# side; otherwise, gets initialized to 0, ignoring value in DB
-                data.Id = id;
-                return data;
+                return DeserializeGameData(returnData);
             }
         }
 
@@ -82,7 +82,7 @@ namespace Data
                 stateParam.Value = SerializeGameData(newData);
                 command.Parameters.Add(stateParam);
 
-                var idParam = new SqlParameter("@id", SqlDbType.Int);
+                var idParam = new SqlParameter("@id", SqlDbType.UniqueIdentifier);
                 idParam.Value = newData.Id; 
                 command.Parameters.Add(idParam);
 
