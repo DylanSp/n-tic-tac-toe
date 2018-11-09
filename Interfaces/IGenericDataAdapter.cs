@@ -7,7 +7,8 @@ namespace Interfaces
         Guid Id { get; set; }
     }
 
-    public interface IDataAdapter<T> where T : IEntity
+
+    public interface IGenericDataAdapter<T> where T : IEntity
     {
         T Read(Guid id);
         void CreateOrUpdate(T newData);

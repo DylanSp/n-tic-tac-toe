@@ -6,7 +6,7 @@ namespace Managers
     class DataManager
     {
         public GameManager GameManager { get; private set; }
-        private IDataAdapter<TicTacToeData> Adapter { get; set; }
+        private IGenericDataAdapter<TicTacToeData> Adapter { get; set; }
 
         // don't want to do this in constructor, because CreateOrUpdate() can throw
         public void CreateAndSaveGame()

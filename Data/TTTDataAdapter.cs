@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace Data
 {
-    public class TTTDataAdapter : IDataAdapter<TicTacToeData>
+    public class TTTDataAdapter : IGenericDataAdapter<TicTacToeData>
     {
         // private const string ConnectionString = "Data Source=localhost;Initial Catalog=TicTacToe;Persist Security Info=True;User ID=sa;Password=D0cupPhase1!";
         private const string ConnectionString = "Data Source=localhost;Initial Catalog=TicTacToe;Persist Security Info=True;User ID=sa;Password=adminpass";
