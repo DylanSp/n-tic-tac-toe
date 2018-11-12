@@ -261,4 +261,4 @@ __pycache__/
 *.pyc
 
 # App.config files
-*.App.config
+**/App.config
