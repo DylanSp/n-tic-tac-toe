@@ -35,8 +35,6 @@ namespace GameConsole
 
             var connectionString = ConfigurationManager.ConnectionStrings["dev"].ToString();
             builder.Register(ctx => new TTTDataAdapter(connectionString)).As<IGenericDataAdapter<ITicTacToeData>>();
-
-            // builder.RegisterType<TTTDataAdapter>().As<IGenericDataAdapter<ITicTacToeData>>();
             builder.RegisterType<GameManager>().As<IGameManager>();
             builder.RegisterType<DataManager>().As<IDataManager>();
             Container = builder.Build();

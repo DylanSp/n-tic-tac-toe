@@ -9,7 +9,12 @@ namespace Data
 {
     public class TTTDataAdapter : IGenericDataAdapter<ITicTacToeData>
     {
-        private readonly string ConnectionString; // = ConfigurationManager.ConnectionStrings["dev"].ToString();
+        private readonly string ConnectionString;
+
+        private TTTDataAdapter ()   // set to private to ensure ConnectionString gets initialized
+        {
+
+        }
 
         public TTTDataAdapter (string connectionString)
         {
