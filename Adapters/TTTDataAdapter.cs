@@ -3,15 +3,18 @@ using Interfaces;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Xml;
 using System.Xml.Serialization;
 
 namespace Data
 {
     public class TTTDataAdapter : IGenericDataAdapter<ITicTacToeData>
     {
-        // private const string ConnectionString = "Data Source=localhost;Initial Catalog=TicTacToe;Persist Security Info=True;User ID=sa;Password=D0cupPhase1!";
-        private const string ConnectionString = "Data Source=localhost;Initial Catalog=TicTacToe;Persist Security Info=True;User ID=sa;Password=adminpass";
+        private readonly string ConnectionString; // = ConfigurationManager.ConnectionStrings["dev"].ToString();
+
+        public TTTDataAdapter (string connectionString)
+        {
+            ConnectionString = connectionString;
+        }
 
         // can throw exceptions from opening connection, running query, deserialization
         public void Save(ITicTacToeData newData)
