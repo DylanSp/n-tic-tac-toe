@@ -11,13 +11,14 @@ namespace Data
     {
         private readonly string ConnectionString;
 
-        private TTTDataAdapter ()   // set to private to ensure ConnectionString gets initialized
-        {
-
-        }
-
+        // future TODO - instead of taking string,
+        // take some sort of context object that validates connection string
         public TTTDataAdapter (string connectionString)
         {
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new ArgumentNullException("connectionString");
+            }
             ConnectionString = connectionString;
         }
 
