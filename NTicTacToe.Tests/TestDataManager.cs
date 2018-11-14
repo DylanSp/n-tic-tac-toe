@@ -47,19 +47,13 @@ namespace NTicTacToe.Tests
         public void CreatingGame_ShouldSetUpNewGame()
         {
             // Arrange
-            GameManager.GameData.CurrentPlayer.Returns(Player.X);
-            GameManager.GameData.Result.Returns(GameResult.Unfinished);
-            GameManager.GameData.Board.Returns(Enumerable.Repeat(CellState.Empty, 9).ToList());
+            // (none)
 
             // Act
             DataManager.CreateAndSaveGame();
 
             // Assert
-            var gameData = DataManager.GameManager.GameData;
-            Assert.AreEqual(Player.X, gameData.CurrentPlayer);
-            Assert.AreEqual(GameResult.Unfinished, gameData.Result);
-            var emptyBoard = Enumerable.Repeat(CellState.Empty, 9).ToList();
-            Assert.IsTrue(emptyBoard.SequenceEqual(gameData.Board));
+            GameManager.Received().ResetGame();
         }
     }
 }
