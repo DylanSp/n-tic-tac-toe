@@ -1,5 +1,6 @@
 ﻿using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Configuration;
 using Types;
 
 namespace NTicTacToe.Tests
@@ -19,7 +20,8 @@ namespace NTicTacToe.Tests
         [TestMethod, TestCategory("IntegrationTest")]
         public void TempTests()
         {
-            var adapter = new TTTDataAdapter();
+            var connectionString = ConfigurationManager.ConnectionStrings["test"].ToString();
+            var adapter = new TTTDataAdapter(connectionString);
             var gameData0 = new TicTacToeData();
             adapter.Save(gameData0);
             var gameDataShouldEqual0 = adapter.Read(gameData0.Id);
