@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using Adapters;
+using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -7,13 +8,13 @@ using Types;
 namespace NTicTacToe.Tests
 {
     [TestClass]
-    public class TestTTTDataAdapter
+    public class TestSqlServerAdapter
     {
         [TestMethod]
         public void SerializeThenDeserialize_ShouldRoundTrip()
         {
             var data = new TicTacToeData();
-            var roundTripped = TTTDataAdapter.DeserializeGameData(TTTDataAdapter.SerializeGameData(data));
+            var roundTripped = SqlServerAdapter.DeserializeGameData(SqlServerAdapter.SerializeGameData(data));
             Assert.AreEqual(data, roundTripped);
         }
 
@@ -22,7 +23,7 @@ namespace NTicTacToe.Tests
         {
             // Arrange
             var connectionString = ConfigurationManager.ConnectionStrings["test"].ToString();
-            var adapter = new TTTDataAdapter(connectionString);
+            var adapter = new SqlServerAdapter(connectionString);
             var gameData = new TicTacToeData();
 
             // change gameData to make sure Read() isn't just constructing new TicTacToeData()
@@ -41,7 +42,7 @@ namespace NTicTacToe.Tests
         {
             // Arrange
             var connectionString = ConfigurationManager.ConnectionStrings["test"].ToString();
-            var adapter = new TTTDataAdapter(connectionString);
+            var adapter = new SqlServerAdapter(connectionString);
             var newGame = new TicTacToeData();
             int numPreExistingGames;
 
@@ -79,7 +80,7 @@ namespace NTicTacToe.Tests
             // create new game and insert it, so we have something to update
             var gameToUpdate = new TicTacToeData();
             var connectionString = ConfigurationManager.ConnectionStrings["test"].ToString();
-            var adapter = new TTTDataAdapter(connectionString);
+            var adapter = new SqlServerAdapter(connectionString);
 
             adapter.Save(gameToUpdate);
 
@@ -118,7 +119,7 @@ namespace NTicTacToe.Tests
             // create new game and insert it, so we have something to delete
             var gameToUpdate = new TicTacToeData();
             var connectionString = ConfigurationManager.ConnectionStrings["test"].ToString();
-            var adapter = new TTTDataAdapter(connectionString);
+            var adapter = new SqlServerAdapter(connectionString);
 
             adapter.Save(gameToUpdate);
 

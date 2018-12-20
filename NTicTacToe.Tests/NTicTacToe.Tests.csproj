@@ -90,7 +90,7 @@
     <Compile Include="TestDataManager.cs" />
     <Compile Include="TestGameManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestTTTDataAdapter.cs" />
+    <Compile Include="TestSqlServerAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

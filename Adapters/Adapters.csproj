@@ -42,7 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TTTDataAdapter.cs" />
+    <Compile Include="RedisAdapter.cs" />
+    <Compile Include="SqlServerAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj">
@@ -53,6 +54,11 @@
       <Project>{76e52909-08dc-4b62-801a-2addddad60c3}</Project>
       <Name>Interfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="StackExchange.Redis">
+      <Version>2.0.519</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

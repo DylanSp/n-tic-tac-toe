@@ -4,22 +4,26 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Xml.Serialization;
+using Data;
 
-namespace Data
+namespace Adapters
 {
-    public class TTTDataAdapter : IGenericDataAdapter<ITicTacToeData>
+    public class SqlServerAdapter : IGenericDataAdapter<ITicTacToeData>
     {
+        private readonly Serializer serializer;
         private readonly string ConnectionString;
 
         // future TODO - instead of taking string,
         // take some sort of context object that validates connection string
-        public TTTDataAdapter (string connectionString)
+        public SqlServerAdapter (string connectionString)
         {
             if (string.IsNullOrWhiteSpace(connectionString))
             {
                 throw new ArgumentNullException("connectionString");
             }
             ConnectionString = connectionString;
+
+            serializer = new Serializer();
         }
 
         // can throw exceptions from opening connection, running query, deserialization
@@ -34,7 +38,7 @@ ELSE
                 var command = new SqlCommand(queryString, connection);
 
                 var stateParam = new SqlParameter("@state", SqlDbType.NVarChar);
-                stateParam.Value = SerializeGameData(newData);
+                stateParam.Value = serializer.SerializeGameData(newData);
                 command.Parameters.Add(stateParam);
 
                 var idParam = new SqlParameter("@id", SqlDbType.UniqueIdentifier);
@@ -60,7 +64,7 @@ ELSE
 
                 connection.Open();
                 var returnData = (string)command.ExecuteScalar();
-                return DeserializeGameData(returnData);
+                return serializer.DeserializeGameData(returnData);
             }
         }
 
@@ -78,25 +82,6 @@ ELSE
 
                 connection.Open();
                 command.ExecuteNonQuery();
-            }
-        }
-
-        public static string SerializeGameData(ITicTacToeData data)
-        {
-            var serializer = new XmlSerializer(typeof(TicTacToeData));
-            using (var stringWriter = new StringWriter())
-            {
-                serializer.Serialize(stringWriter, data);
-                return stringWriter.ToString();
-            }
-        }
-
-        public static ITicTacToeData DeserializeGameData(string data)
-        {
-            var deserializer = new XmlSerializer(typeof(TicTacToeData));
-            using (var reader = new StringReader(data))
-            {
-                return deserializer.Deserialize(reader) as TicTacToeData;
             }
         }
     }
