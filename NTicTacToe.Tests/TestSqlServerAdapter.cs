@@ -10,11 +10,13 @@ namespace NTicTacToe.Tests
     [TestClass]
     public class TestSqlServerAdapter
     {
+        // TODO - split this out
         [TestMethod]
         public void SerializeThenDeserialize_ShouldRoundTrip()
         {
             var data = new TicTacToeData();
-            var roundTripped = SqlServerAdapter.DeserializeGameData(SqlServerAdapter.SerializeGameData(data));
+            var serializer = new Serializer();
+            var roundTripped = serializer.DeserializeGameData(serializer.SerializeGameData(data));
             Assert.AreEqual(data, roundTripped);
         }
 
