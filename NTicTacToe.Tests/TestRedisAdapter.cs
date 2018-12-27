@@ -1,6 +1,7 @@
 ﻿using Adapters;
 using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NTicTacToe.Tests.Utilities;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -47,17 +48,14 @@ namespace NTicTacToe.Tests
         public void SavingNewObject_ShouldInsertOneRecord()
         {
             // Arrange
-            var conn = ConnectionMultiplexer.Connect(ConnectionString);
-            var endpoints = conn.GetEndPoints();
-            var server = conn.GetServer(endpoints[0]);
-            int numPreExistingGames = server.Keys().Count();
+            int numPreExistingGames = AdapterTestHelpers.CountRedisGames(ConnectionString);
 
             // Act
             var newGame = new TicTacToeData();
             Adapter.Save(newGame);
 
             // Assert
-            int numPostExistingGames = server.Keys().Count();
+            int numPostExistingGames = AdapterTestHelpers.CountRedisGames(ConnectionString);
             Assert.AreEqual(numPreExistingGames + 1, numPostExistingGames);
         }
 
@@ -66,21 +64,18 @@ namespace NTicTacToe.Tests
         public void SavingExistingObject_ShouldPreserveNumberOfRecords()
         {
             // Arrange
-            var conn = ConnectionMultiplexer.Connect(ConnectionString);
-            var endpoints = conn.GetEndPoints();
-            var server = conn.GetServer(endpoints[0]);
 
             // create new game and insert it, so we have something to update
             var gameToUpdate = new TicTacToeData();
             Adapter.Save(gameToUpdate);
-            int numPreExistingGames = server.Keys().Count();
+            int numPreExistingGames = AdapterTestHelpers.CountRedisGames(ConnectionString);
 
             // Act
             gameToUpdate.CurrentPlayer = Player.O;
             Adapter.Save(gameToUpdate);
 
             // Assert
-            int numPostExistingGames = server.Keys().Count();
+            int numPostExistingGames = AdapterTestHelpers.CountRedisGames(ConnectionString);
             Assert.AreEqual(numPreExistingGames, numPostExistingGames);
         }
 
@@ -88,20 +83,17 @@ namespace NTicTacToe.Tests
         public void DeletingGame_ShouldRemoveOneRecord()
         {
             // Arrange
-            var conn = ConnectionMultiplexer.Connect(ConnectionString);
-            var endpoints = conn.GetEndPoints();
-            var server = conn.GetServer(endpoints[0]);
 
             // create new game and insert it, so we have something to delete
             var gameToUpdate = new TicTacToeData();
             Adapter.Save(gameToUpdate);
-            int numPreExistingGames = server.Keys().Count();
+            int numPreExistingGames = AdapterTestHelpers.CountRedisGames(ConnectionString);
 
             // Act
             Adapter.Delete(gameToUpdate.Id);
 
             // Assert
-            int numPostExistingGames = server.Keys().Count();
+            int numPostExistingGames = AdapterTestHelpers.CountRedisGames(ConnectionString);
             Assert.AreEqual(numPreExistingGames - 1, numPostExistingGames);
         }
     }

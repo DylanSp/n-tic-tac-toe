@@ -1,6 +1,7 @@
 ﻿using Adapters;
 using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NTicTacToe.Tests.Utilities;
 using System.Configuration;
 using System.Data.SqlClient;
 using Types;
@@ -10,6 +11,8 @@ namespace NTicTacToe.Tests
     [TestClass]
     public class TestSqlServerAdapter
     {
+        // TODO - have Adapter, ConnectionString as properties?
+
         // TODO - split this out
         [TestMethod]
         public void SerializeThenDeserialize_ShouldRoundTrip()
@@ -47,31 +50,13 @@ namespace NTicTacToe.Tests
             var connectionString = ConfigurationManager.ConnectionStrings["test"].ToString();
             var adapter = new SqlServerAdapter(connectionString);
             var newGame = new TicTacToeData();
-            int numPreExistingGames;
-
-            using (var connection = new SqlConnection(connectionString))
-            {
-                var queryString = "SELECT COUNT(*) FROM GameData";
-                var command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                numPreExistingGames = (int)command.ExecuteScalar();
-            }
+            int numPreExistingGames = AdapterTestHelpers.CountSqlGames(connectionString);
 
             // Act
             adapter.Save(newGame);
 
             // Assert
-            int numPostExistingGames;
-            using (var connection = new SqlConnection(connectionString))
-            {
-                var queryString = "SELECT COUNT(*) FROM GameData";
-                var command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                numPostExistingGames = (int)command.ExecuteScalar();
-            }
-
+            int numPostExistingGames = AdapterTestHelpers.CountSqlGames(connectionString);
             Assert.AreEqual(numPreExistingGames + 1, numPostExistingGames);
         }
 
@@ -87,30 +72,14 @@ namespace NTicTacToe.Tests
 
             adapter.Save(gameToUpdate);
 
-            int numPreExistingGames;
-            using (var connection = new SqlConnection(connectionString))
-            {
-                var queryString = "SELECT COUNT(*) FROM GameData";
-                var command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                numPreExistingGames = (int)command.ExecuteScalar();
-            }
+            int numPreExistingGames = AdapterTestHelpers.CountSqlGames(connectionString);
 
             // Act
             gameToUpdate.CurrentPlayer = Player.O;
             adapter.Save(gameToUpdate);
 
             // Assert
-            int numPostExistingGames;
-            using (var connection = new SqlConnection(connectionString))
-            {
-                var queryString = "SELECT COUNT(*) FROM GameData";
-                var command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                numPostExistingGames = (int)command.ExecuteScalar();
-            }
+            int numPostExistingGames = AdapterTestHelpers.CountSqlGames(connectionString);
             Assert.AreEqual(numPreExistingGames, numPostExistingGames);
         }
 
@@ -126,29 +95,13 @@ namespace NTicTacToe.Tests
 
             adapter.Save(gameToUpdate);
 
-            int numPreExistingGames;
-            using (var connection = new SqlConnection(connectionString))
-            {
-                var queryString = "SELECT COUNT(*) FROM GameData";
-                var command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                numPreExistingGames = (int)command.ExecuteScalar();
-            }
+            int numPreExistingGames = AdapterTestHelpers.CountSqlGames(connectionString);
 
             // Act
             adapter.Delete(gameToUpdate.Id);
 
             // Assert
-            int numPostExistingGames;
-            using (var connection = new SqlConnection(connectionString))
-            {
-                var queryString = "SELECT COUNT(*) FROM GameData";
-                var command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                numPostExistingGames = (int)command.ExecuteScalar();
-            }
+            int numPostExistingGames = AdapterTestHelpers.CountSqlGames(connectionString);
             Assert.AreEqual(numPreExistingGames - 1, numPostExistingGames);
         }
     }

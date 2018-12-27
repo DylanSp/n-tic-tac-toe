@@ -10,8 +10,6 @@ using Types;
 
 namespace NTicTacToe.Tests
 {
-    // TODO - factor out counting for Sql, Redis into utility methods for all Adapter tests to use?
-
     [TestClass]
     public class TestSqlServerCachedAdapter
     {
