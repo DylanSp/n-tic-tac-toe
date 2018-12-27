@@ -36,9 +36,10 @@ namespace NTicTacToe.Tests
 
             // Act
             Adapter.Save(gameData);
-            var readData = Adapter.Read(gameData.Id);
+            var (readSuccessfully, readData) = Adapter.Read(gameData.Id);
 
             // Assert
+            Assert.IsTrue(readSuccessfully);
             Assert.AreEqual(gameData, readData);
         }
 

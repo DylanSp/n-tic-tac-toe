@@ -1,5 +1,6 @@
 ﻿using Data;
 using Interfaces;
+using System;
 using Types;
 
 namespace Managers
@@ -21,9 +22,18 @@ namespace Managers
             Adapter.Save(GameManager.GameData);
         }
 
-        public ITicTacToeData GetGameData ()
+        public ITicTacToeData GetGameData()
         {
-            return Adapter.Read(GameManager.GameData.Id);
+            var (readSuccessfully, gameData) = Adapter.Read(GameManager.GameData.Id);
+            if (readSuccessfully)
+            {
+                return gameData;
+            }
+            else
+            {
+                // TODO - really throw an exception here?
+                throw new Exception("Game doesn't exist!");
+            }
         }
 
         public MoveResult AttemptAndSaveMove(int cellNum)

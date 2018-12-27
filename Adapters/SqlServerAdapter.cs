@@ -51,7 +51,7 @@ ELSE
         }
 
         // can throw exceptions from opening connection, running query, deserialization
-        public ITicTacToeData Read(Guid id)
+        public (bool, ITicTacToeData) Read(Guid id)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
@@ -64,7 +64,14 @@ ELSE
 
                 connection.Open();
                 var returnData = (string)command.ExecuteScalar();
-                return serializer.DeserializeGameData(returnData);
+                if (returnData == null)
+                {
+                    return (false, new EmptyTicTacToeData());
+                }
+                else
+                {
+                    return (true, serializer.DeserializeGameData(returnData));
+                }
             }
         }
 

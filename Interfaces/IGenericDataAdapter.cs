@@ -11,7 +11,7 @@ namespace Interfaces
     public interface IGenericDataAdapter<T> where T : IEntity
     {
         void Save(T newData);
-        T Read(Guid id);
+        (bool, T) Read(Guid id);
         void Delete(Guid id);
     }
 }

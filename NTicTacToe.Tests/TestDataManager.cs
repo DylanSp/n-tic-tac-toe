@@ -33,7 +33,7 @@ namespace NTicTacToe.Tests
         public void GetGameData_ShouldReturnCorrectData()
         {
             // Arrange
-            Adapter.Read(TestId).Returns(TestData);
+            Adapter.Read(TestId).Returns((true, TestData));
             GameManager.GameData.Returns(TestData);
 
             // Act

@@ -17,6 +17,7 @@ namespace GameConsole
         private static IContainer Container { get; set; }
         static void Main(string[] args)
         {
+
             ConfigureAutofac();
             using (var scope = Container.BeginLifetimeScope())
             {

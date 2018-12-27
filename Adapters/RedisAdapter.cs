@@ -33,11 +33,18 @@ namespace Adapters
             db.KeyDelete(id.ToString());
         }
 
-        public ITicTacToeData Read(Guid id)
+        public (bool, ITicTacToeData) Read(Guid id)
         {
             var db = RedisConnection.GetDatabase();
             var gameData = db.StringGet(id.ToString());
-            return Serializer.DeserializeGameData(gameData);
+            if (gameData == RedisValue.Null)
+            {
+                return (false, new EmptyTicTacToeData());
+            }
+            else
+            {
+                return (true, Serializer.DeserializeGameData(gameData));
+            }
         }
 
         public void Save(ITicTacToeData newData)
