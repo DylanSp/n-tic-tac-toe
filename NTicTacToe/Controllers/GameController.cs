@@ -69,20 +69,27 @@ namespace NTicTacToe.Controllers
         [Route("games/{gameId:guid}/{cellNum:int}")]
         public IHttpActionResult MakeMove(Guid gameId, int cellNum)
         {
-            var moveResult = Manager.AttemptAndSaveMove(gameId, cellNum);
-            switch(moveResult)
+            try
             {
-                // intentional fall-through
-                case MoveResult.WaitingForMove:
-                case MoveResult.GameFinished:
-                    return Ok(SerializeGameDataAsJson(Manager.GetGameData(gameId)));
-                case MoveResult.CellFilled:
-                    return BadRequest($"Cell {cellNum} already filled");
-                case MoveResult.GameAlreadyOver:
-                    return BadRequest("Game is already over");
-                default:
-                    // should never be reached
-                    throw new Exception("Unaccounted-for MoveResult");
+                var moveResult = Manager.AttemptAndSaveMove(gameId, cellNum);
+                switch (moveResult)
+                {
+                    // intentional fall-through
+                    case MoveResult.WaitingForMove:
+                    case MoveResult.GameFinished:
+                        return Ok(SerializeGameDataAsJson(Manager.GetGameData(gameId)));
+                    case MoveResult.CellFilled:
+                        return BadRequest($"Cell {cellNum} already filled");
+                    case MoveResult.GameAlreadyOver:
+                        return BadRequest("Game is already over");
+                    default:
+                        // should never be reached
+                        throw new Exception("Unaccounted-for MoveResult");
+                }
+            }
+            catch (Exception e)
+            {
+                return NotFound();
             }
         }
 
