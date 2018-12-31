@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Adapters
 {
+    // TODO - handle errors. swallow errors from cache, let errors from primary bubble up?
     public class SqlServerCachedAdapter : IGenericDataAdapter<ITicTacToeData>
     {
         private IGenericDataAdapter<ITicTacToeData> PrimaryDataSource;
@@ -49,6 +50,9 @@ namespace Adapters
 
         public void Save(ITicTacToeData newData)
         {
+            // lock here? but can't use await, then, so everything's synchronous
+            // we might be ok with that - existing DAL is all synchronous, looks like
+            // more importantly, would have to use distributed lock in Docuphase code, which is :(
             Cache.Save(newData);
             PrimaryDataSource.Save(newData);
         }
