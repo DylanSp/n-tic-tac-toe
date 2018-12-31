@@ -23,7 +23,7 @@ namespace NTicTacToe.Controllers
         {
             var allGames = Manager.GetAllGamesData();
             var allGameIds = allGames.Select(game => game.Id);
-            var json = JToken.FromObject(allGameIds);
+            var json = JArray.FromObject(allGameIds);
             return Ok(json);
         }
 
@@ -60,7 +60,7 @@ namespace NTicTacToe.Controllers
             }
             catch (Exception e)
             {
-                return InternalServerError(e);
+                return NotFound();
             }
         }
 
