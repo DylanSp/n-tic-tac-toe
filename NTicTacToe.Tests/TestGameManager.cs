@@ -17,6 +17,7 @@ namespace NTicTacToe.Tests
         public void BeforeEach()
         {
             game = new GameManager(new TicTacToeData());
+            game.ResetGame();
         }
 
         [TestMethod]

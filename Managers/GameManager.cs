@@ -14,7 +14,6 @@ namespace Managers
         public GameManager(ITicTacToeData data)
         {
             GameData = data;
-            ResetGame();
         }
 
         public void ResetGame()

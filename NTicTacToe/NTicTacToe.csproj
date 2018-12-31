@@ -123,6 +123,10 @@
       <Project>{D4786267-5E5D-414C-B781-92CBA3B3B7CA}</Project>
       <Name>Managers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Types\Types.csproj">
+      <Project>{65FD0663-EB53-452B-93E7-6B8230F82D38}</Project>
+      <Name>Types</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
