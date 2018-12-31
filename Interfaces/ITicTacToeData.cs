@@ -1,9 +1,7 @@
-﻿using Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Types;
 
-namespace Data
+namespace Interfaces
 {
     public interface ITicTacToeData : IEntity
     {

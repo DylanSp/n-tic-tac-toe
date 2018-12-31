@@ -1,13 +1,14 @@
-﻿using Data;
-using Interfaces;
+﻿using System;
+using System.Collections.Generic;
 using Types;
 
-namespace Managers
+namespace Interfaces
 {
     public interface IDataManager
     {
-        MoveResult AttemptAndSaveMove(int cellNum);
-        void CreateAndSaveGame();
-        ITicTacToeData GetGameData();
+        MoveResult AttemptAndSaveMove(Guid gameId, int cellNum);
+        Guid CreateAndSaveGame();
+        ITicTacToeData GetGameData(Guid gameId);
+        IEnumerable<ITicTacToeData> GetAllGamesData();
     }
 }

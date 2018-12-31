@@ -2,13 +2,10 @@
 using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NTicTacToe.Tests.Utilities;
-using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Types;
 
 namespace NTicTacToe.Tests
@@ -95,6 +92,30 @@ namespace NTicTacToe.Tests
             // Assert
             int numPostExistingGames = AdapterTestHelpers.CountRedisGames(ConnectionString);
             Assert.AreEqual(numPreExistingGames - 1, numPostExistingGames);
+        }
+
+        [TestMethod, TestCategory("IntegrationTest")]
+        public void ReadingAllGames_ShouldReturnAllGames()
+        {
+            // Arrange
+            var insertedGames = new List<TicTacToeData>()
+            {
+                new TicTacToeData(),
+                new TicTacToeData()
+            };
+            foreach (var game in insertedGames)
+            {
+                Adapter.Save(game);
+            }
+
+            // Act
+            var allGames = Adapter.ReadAll();
+
+            // Assert
+            foreach (var game in insertedGames)
+            {
+                Assert.IsTrue(allGames.Contains(game));
+            }
         }
     }
 }

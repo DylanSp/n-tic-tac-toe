@@ -2,9 +2,6 @@
 using Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Adapters
 {
@@ -46,6 +43,12 @@ namespace Adapters
             {
                 return (false, new EmptyTicTacToeData());
             }
+        }
+
+        public IEnumerable<ITicTacToeData> ReadAll()
+        {
+            // can't rely on cache having all data, so just go to the primary source
+            return PrimaryDataSource.ReadAll();
         }
 
         public void Save(ITicTacToeData newData)

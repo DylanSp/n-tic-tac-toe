@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Data;
 using Interfaces;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
-using System.Xml.Serialization;
-using Data;
 
 namespace Adapters
 {
     public class SqlServerAdapter : IGenericDataAdapter<ITicTacToeData>
     {
-        private readonly Serializer serializer;
+        private readonly Serializer Serializer;
         private readonly string ConnectionString;
 
         // future TODO - instead of taking string,
@@ -23,7 +22,7 @@ namespace Adapters
             }
             ConnectionString = connectionString;
 
-            serializer = new Serializer();
+            Serializer = new Serializer();
         }
 
         // can throw exceptions from opening connection, running query, deserialization
@@ -38,7 +37,7 @@ ELSE
                 var command = new SqlCommand(queryString, connection);
 
                 var stateParam = new SqlParameter("@state", SqlDbType.NVarChar);
-                stateParam.Value = serializer.SerializeGameData(newData);
+                stateParam.Value = Serializer.SerializeGameData(newData);
                 command.Parameters.Add(stateParam);
 
                 var idParam = new SqlParameter("@id", SqlDbType.UniqueIdentifier);
@@ -70,8 +69,27 @@ ELSE
                 }
                 else
                 {
-                    return (true, serializer.DeserializeGameData(returnData));
+                    return (true, Serializer.DeserializeGameData(returnData));
                 }
+            }
+        }
+
+        public IEnumerable<ITicTacToeData> ReadAll()
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                var queryString = "SELECT GameState FROM GameData";
+                var command = new SqlCommand(queryString, connection);
+
+                connection.Open();
+                var dataReader = command.ExecuteReader();
+                var allGames = new List<ITicTacToeData>();
+                while (dataReader.Read())
+                {
+                    var gameData = dataReader[0];
+                    allGames.Add(Serializer.DeserializeGameData((string)gameData));
+                }
+                return allGames;
             }
         }
 

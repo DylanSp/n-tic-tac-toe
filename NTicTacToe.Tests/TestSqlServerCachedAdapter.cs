@@ -3,6 +3,7 @@ using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NTicTacToe.Tests.Utilities;
 using StackExchange.Redis;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
@@ -10,6 +11,8 @@ using Types;
 
 namespace NTicTacToe.Tests
 {
+    // TODO - factor out adapter setup into common BeforeEach() method?
+
     [TestClass]
     public class TestSqlServerCachedAdapter
     {
@@ -116,6 +119,36 @@ namespace NTicTacToe.Tests
             int numPostExistingGamesRedis = AdapterTestHelpers.CountRedisGames(redisConnectionString);
             Assert.AreEqual(numPreExistingGamesSql - 1, numPostExistingGamesSql);
             Assert.AreEqual(numPreExistingGamesRedis - 1, numPostExistingGamesRedis);
+        }
+
+        [TestMethod, TestCategory("IntegrationTest")]
+        public void ReadingAllGames_ShouldReturnAllGames()
+        {
+            // Arrange
+            var sqlConnectionString = ConfigurationManager.ConnectionStrings["test"].ToString();
+            var redisConnectionString = ConfigurationManager.ConnectionStrings["redis-test"].ToString();
+            var sqlAdapter = new SqlServerAdapter(sqlConnectionString);
+            var redisAdapter = new RedisAdapter(redisConnectionString);
+            var cachedAdapter = new SqlServerCachedAdapter(sqlAdapter, redisAdapter);
+
+            var insertedGames = new List<TicTacToeData>()
+            {
+                new TicTacToeData(),
+                new TicTacToeData()
+            };
+            foreach (var game in insertedGames)
+            {
+                cachedAdapter.Save(game);
+            }
+
+            // Act
+            var allGames = cachedAdapter.ReadAll();
+
+            // Assert
+            foreach (var game in insertedGames)
+            {
+                Assert.IsTrue(allGames.Contains(game));
+            }
         }
     }
 }

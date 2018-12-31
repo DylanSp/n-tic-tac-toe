@@ -22,8 +22,8 @@ namespace GameConsole
             using (var scope = Container.BeginLifetimeScope())
             {
                 var manager = scope.Resolve<IDataManager>();
-                manager.CreateAndSaveGame();
-                var startingData = manager.GetGameData();
+                var gameId = manager.CreateAndSaveGame();
+                var startingData = manager.GetGameData(gameId);
                 Console.WriteLine(startingData);
             }
             Console.WriteLine("Press Enter to continue...");

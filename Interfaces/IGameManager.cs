@@ -1,5 +1,4 @@
-﻿using Data;
-using Types;
+﻿using Types;
 
 namespace Interfaces
 {

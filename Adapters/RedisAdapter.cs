@@ -47,6 +47,21 @@ namespace Adapters
             }
         }
 
+        public IEnumerable<ITicTacToeData> ReadAll()
+        {
+            var endpoints = RedisConnection.GetEndPoints();
+            var server = RedisConnection.GetServer(endpoints[0]);
+            var keys = server.Keys();
+            var allGames = new List<ITicTacToeData>();
+            var db = RedisConnection.GetDatabase();
+            foreach(var key in keys)
+            {
+                var gameData = db.StringGet(key);
+                allGames.Add(Serializer.DeserializeGameData(gameData));
+            }
+            return allGames;
+        }
+
         public void Save(ITicTacToeData newData)
         {
             var id = newData.Id.ToString();

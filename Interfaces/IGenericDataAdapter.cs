@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Interfaces
 {
@@ -13,5 +14,6 @@ namespace Interfaces
         void Save(T newData);
         (bool, T) Read(Guid id);
         void Delete(Guid id);
+        IEnumerable<T> ReadAll();
     }
 }
