@@ -15,15 +15,9 @@ namespace Adapters
         private readonly ConnectionMultiplexer RedisConnection;
         private readonly Serializer Serializer;
 
-        public RedisAdapter(string connectionString)
+        public RedisAdapter(ConnectionMultiplexer connection)
         {
-            if(string.IsNullOrWhiteSpace(connectionString))
-            {
-                throw new ArgumentNullException("connectionString");
-            }
-
-            RedisConnection = ConnectionMultiplexer.Connect(connectionString);
-
+            RedisConnection = connection;
             Serializer = new Serializer();
         }
 

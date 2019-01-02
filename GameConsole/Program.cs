@@ -3,6 +3,7 @@ using Autofac;
 using Data;
 using Interfaces;
 using Managers;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -35,13 +36,8 @@ namespace GameConsole
             var builder = new ContainerBuilder();
             builder.RegisterType<TicTacToeData>().As<ITicTacToeData>();
 
-            /*
-            var connectionString = ConfigurationManager.ConnectionStrings["dev"].ToString();
-            builder.Register(ctx => new SqlServerAdapter(connectionString)).As<IGenericDataAdapter<ITicTacToeData>>();
-            */
-
             var redisConnectionString = ConfigurationManager.ConnectionStrings["redis-dev"].ToString();
-            builder.Register(ctx => new RedisAdapter(redisConnectionString)).As<IGenericDataAdapter<ITicTacToeData>>();
+            builder.Register(ctx => new RedisAdapter(ConnectionMultiplexer.Connect(redisConnectionString))).As<IGenericDataAdapter<ITicTacToeData>>();
 
             builder.RegisterType<GameManager>().As<IGameManager>();
             builder.RegisterType<DataManager>().As<IDataManager>();

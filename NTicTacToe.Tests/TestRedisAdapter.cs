@@ -2,6 +2,7 @@
 using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NTicTacToe.Tests.Utilities;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -20,7 +21,7 @@ namespace NTicTacToe.Tests
         public void Setup()
         {
             ConnectionString = ConfigurationManager.ConnectionStrings["redis-test"].ToString();
-            Adapter = new RedisAdapter(ConnectionString);
+            Adapter = new RedisAdapter(ConnectionMultiplexer.Connect(ConnectionString));
         }
 
         [TestMethod, TestCategory("IntegrationTest")]

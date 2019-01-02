@@ -23,7 +23,7 @@ namespace NTicTacToe.Tests
             var sqlConnectionString = ConfigurationManager.ConnectionStrings["test"].ToString();
             var redisConnectionString = ConfigurationManager.ConnectionStrings["redis-test"].ToString();
             var sqlAdapter = new SqlServerAdapter(sqlConnectionString);
-            var redisAdapter = new RedisAdapter(redisConnectionString);
+            var redisAdapter = new RedisAdapter(ConnectionMultiplexer.Connect(redisConnectionString));
             var cachedAdapter = new SqlServerCachedAdapter(sqlAdapter, redisAdapter);
             var gameData = new TicTacToeData();
 
@@ -46,7 +46,7 @@ namespace NTicTacToe.Tests
             var sqlConnectionString = ConfigurationManager.ConnectionStrings["test"].ToString();
             var redisConnectionString = ConfigurationManager.ConnectionStrings["redis-test"].ToString();
             var sqlAdapter = new SqlServerAdapter(sqlConnectionString);
-            var redisAdapter = new RedisAdapter(redisConnectionString);
+            var redisAdapter = new RedisAdapter(ConnectionMultiplexer.Connect(redisConnectionString));
             var cachedAdapter = new SqlServerCachedAdapter(sqlAdapter, redisAdapter);
 
             var newGame = new TicTacToeData();
@@ -71,7 +71,7 @@ namespace NTicTacToe.Tests
             var sqlConnectionString = ConfigurationManager.ConnectionStrings["test"].ToString();
             var redisConnectionString = ConfigurationManager.ConnectionStrings["redis-test"].ToString();
             var sqlAdapter = new SqlServerAdapter(sqlConnectionString);
-            var redisAdapter = new RedisAdapter(redisConnectionString);
+            var redisAdapter = new RedisAdapter(ConnectionMultiplexer.Connect(redisConnectionString));
             var cachedAdapter = new SqlServerCachedAdapter(sqlAdapter, redisAdapter);
 
             // create new game and insert it, so we have something to update
@@ -100,7 +100,7 @@ namespace NTicTacToe.Tests
             var sqlConnectionString = ConfigurationManager.ConnectionStrings["test"].ToString();
             var redisConnectionString = ConfigurationManager.ConnectionStrings["redis-test"].ToString();
             var sqlAdapter = new SqlServerAdapter(sqlConnectionString);
-            var redisAdapter = new RedisAdapter(redisConnectionString);
+            var redisAdapter = new RedisAdapter(ConnectionMultiplexer.Connect(redisConnectionString));
             var cachedAdapter = new SqlServerCachedAdapter(sqlAdapter, redisAdapter);
 
             // create new game and insert it, so we have something to delete
@@ -128,7 +128,7 @@ namespace NTicTacToe.Tests
             var sqlConnectionString = ConfigurationManager.ConnectionStrings["test"].ToString();
             var redisConnectionString = ConfigurationManager.ConnectionStrings["redis-test"].ToString();
             var sqlAdapter = new SqlServerAdapter(sqlConnectionString);
-            var redisAdapter = new RedisAdapter(redisConnectionString);
+            var redisAdapter = new RedisAdapter(ConnectionMultiplexer.Connect(redisConnectionString));
             var cachedAdapter = new SqlServerCachedAdapter(sqlAdapter, redisAdapter);
 
             var insertedGames = new List<TicTacToeData>()
