@@ -35,21 +35,36 @@ namespace NTicTacToe
             builder.RegisterType<DataManager>().As<IDataManager>().InstancePerLifetimeScope();
             builder.RegisterType<GameManagerFactory>().As<IGameManagerFactory>().InstancePerLifetimeScope();
 
-            // data adapters
-            builder.Register(x =>
+            bool isUsingCache;
+            var isUsingCacheSetting = ConfigurationManager.AppSettings["useCache"];
+            if (bool.TryParse(isUsingCacheSetting, out isUsingCache) && isUsingCache)
             {
-                var redisConnectionString = ConfigurationManager.ConnectionStrings["redis-dev"].ToString();
-                return ConnectionMultiplexer.Connect(redisConnectionString);
-            }).As<ConnectionMultiplexer>().SingleInstance();
+                // data adapters
+                builder.Register(x =>
+                {
+                    var redisConnectionString = ConfigurationManager.ConnectionStrings["redis-azure"].ToString();
+                    return ConnectionMultiplexer.Connect(redisConnectionString);
+                }).As<ConnectionMultiplexer>().SingleInstance();
 
-            builder.Register(x =>
+                builder.Register(x =>
+                {
+                    var sqlConnectionString = ConfigurationManager.ConnectionStrings["sql-azure"].ToString();
+                    var sqlAdapter = new SqlServerAdapter(sqlConnectionString);
+                    var connectionMultiplexer = x.Resolve<ConnectionMultiplexer>();
+                    var redisAdapter = new RedisAdapter(connectionMultiplexer);
+                    return new SqlServerCachedAdapter(sqlAdapter, redisAdapter);
+                }).As<IGenericDataAdapter<ITicTacToeData>>().InstancePerLifetimeScope();
+            }
+            else
             {
-                var sqlConnectionString = ConfigurationManager.ConnectionStrings["sql-dev"].ToString();
-                var sqlAdapter = new SqlServerAdapter(sqlConnectionString);
-                var connectionMultiplexer = x.Resolve<ConnectionMultiplexer>();
-                var redisAdapter = new RedisAdapter(connectionMultiplexer);
-                return new SqlServerCachedAdapter(sqlAdapter, redisAdapter);
-            }).As<IGenericDataAdapter<ITicTacToeData>>().InstancePerLifetimeScope();
+                builder.Register(x =>
+                {
+                    var sqlConnectionString = ConfigurationManager.ConnectionStrings["sql-azure"].ToString();
+                    return new SqlServerAdapter(sqlConnectionString);
+                }).As<IGenericDataAdapter<ITicTacToeData>>().InstancePerLifetimeScope();
+            }
+
+            
 
             return builder.Build();
         }
