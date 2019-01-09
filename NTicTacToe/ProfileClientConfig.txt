@@ -1,0 +1,36 @@
+﻿[{
+	"Class": "Adapters.*",
+	"Method": "*"
+},
+{
+	"Class": "Interfaces.*",
+	"Method": "*"
+},
+{
+	"Class": "Managers.*",
+	"Method": "*"
+},
+{
+	"Class": "Data.*",
+	"Method": "*"
+},
+{
+	"Class": "NTicTacToe.Controllers.GameController",
+	"Method": "GetAllGames"
+},
+{
+	"Class": "NTicTacToe.Controllers.GameController",
+	"Method": "CreateGame"
+},
+{
+	"Class": "NTicTacToe.Controllers.GameController",
+	"Method": "GetGame"
+},
+{
+	"Class": "NTicTacToe.Controllers.GameController",
+	"Method": "MakeMove"
+},
+{
+	"Class": "NTicTacToe.Controllers.GameController",
+	"Method": "SerializeGameDataAsJson"
+}]
